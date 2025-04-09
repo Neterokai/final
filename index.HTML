@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="estilo.css"> <!-- Corrigido o nome do arquivo para a convenção de minúsculas -->
+    <style>
+        .container {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .input-group {
+            margin: 10px 0;
+        }
+
+        input, button {
+            padding: 10px;
+            margin: 5px;
+            font-size: 1.2em;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        /* Mensagens de erro e certo */
+        .erro-mensagem, .mensagem-certa, .ultima-mensagem {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            color: white;
+            font-size: 1.2em;
+            text-align: center;
+            border-radius: 10px;
+            display: none;
+            z-index: 1000;
+        }
+
+        .erro-mensagem {
+            background-color: rgba(255, 0, 0, 0.7);
+        }
+
+        .mensagem-certa {
+            background-color: rgba(0, 255, 0, 0.7);
+        }
+
+        .ultima-mensagem {
+            background-color: rgba(0, 0, 255, 0.7);
+        }
+
+        /* Botão para continuar */
+        #btn-video {
+            display: none;
+            margin-top: 20px;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 1.2em;
+            padding: 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 50%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Centralizar o botão "Última Dica" */
+        #final {
+            display: none;
+            position: fixed;
+            top: 50%; /* Alinha verticalmente no centro */
+            left: 50%; /* Alinha horizontalmente no centro */
+            transform: translate(-50%, -50%);
+            margin-top: 20px;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 1.2em;
+            padding: 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 1000;
+        }
+
+        /* Vídeo que ficará à frente de tudo */
+        #video-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 9999;
+            display: none;
+            opacity: 0; /* Inicialmente invisível */
+            transition: opacity 2s ease-in-out; /* Transição suave de fade-in */
+        }
+
+        /* Animação de fade-in */
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        /* Classe para animar o vídeo com fade-in */
+        .fadeIn {
+            opacity: 1 !important;
+        }
+
+        @media (max-width: 600px) {
+            h2, h1 {
+                font-size: 1.2em;
+            }
+
+            .input-group input, .input-group button {
+                width: 100%;
+                font-size: 1em;
+            }
+
+            .erro-mensagem, .mensagem-certa, .ultima-mensagem {
+                font-size: 1em;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<h2>Feliz Aniversário Meu Amor!!!!</h2>
+<div class="parabens">
+    <br>
+    <h1>Neste dia nasceu uma beldade, que eu faço questão de dizer que amo todos os dias para garantir que não se esqueça, <br><br> Mas, de tanto dizer, já não sei mais o que posso fazer para afirmar isso, então estou inovando minhas táticas. <br><br> Completando seus 20 anos, é necessário um presente diferente, e é por isso que estamos aqui. <br> </strong></h1>
+</div>
+
+<h1>A espera do presente!</h1>
+<hr>
+<p>REGRAS: <br> Nesta caixa foi entregue o seu primeiro presente, o outro será direcionado por aqui, através de um jogo de senhas. <br> Você terá de descobrir essas 3 senhas até o dia <strong> 17/04</strong>,<br> nesta data (ou antes) ele vai ser entregue, mas até lá, se esforce no desafio!!</p>
+<hr>
+<div class="container">
+    <p>Digite a senha para desbloquear a próxima etapa.</p>
+
+    <div class="input-group" id="senha1-container">
+        <input type="password" id="senha1" placeholder="Dica: jantar de hoje!!">
+        <button onclick="verificarSenha1()">Verificar Senha</button>
+    </div>
+
+    <div class="input-group" id="senha2-container" style="display:none;">
+        <input type="password" id="senha2" placeholder="3° filho do pascal(enrolados)">
+        <button onclick="verificarSenha2()" disabled>Verificar Senha</button>
+    </div>
+
+    <div class="input-group" id="senha3-container" style="display:none;">
+        <input type="password" id="senha3" placeholder="Dica:Sua flor favorita...">
+        <button onclick="verificarSenha3()" disabled>Verificar Senha</button>
+    </div>
+
+    <button id="btn-video" style="display: none;" onclick="mostrarVideo()">Última Dica</button>
+</div>
+
+<div id="erro" class="erro-mensagem">ERRADO!! Tente novamente.</div>
+<div id="correto" class="mensagem-certa"> PARABÉNS!! acertou.</div>
+<div id="final" class="ultima-mensagem"> PARABÉNS MEU AMOR!! <br> Você acertou todas, e por isso vai ganhar seu presente, na forma da sua última resposta, só que eterna.</div>
+
+<script>
+    const senha1correta = "anshin";
+    const senha2correta = "Tungbert";
+    const senha3correta = "girassol";
+    let terceiraSenhaCorreta = false; 
+
+    function verificarSenha1() {
+        const senha1 = document.getElementById("senha1").value;
+        const erro = document.getElementById("erro");
+
+        if (senha1 === senha1correta) {
+            document.getElementById("correto").style.display = "block"; 
+            setTimeout(function() {
+                document.getElementById("correto").style.display = "none";
+            }, 2000); 
+            document.getElementById("senha2-container").style.display = "block"; 
+            document.getElementById("senha2").focus(); 
+            document.querySelector("#senha2-container button").disabled = false; 
+        } else {
+            erro.style.display = "block"; 
+            setTimeout(function() {
+                erro.style.display = "none";
+            }, 2000);
+        }
+    }
+
+    function verificarSenha2() {
+        const senha2 = document.getElementById("senha2").value;
+        const erro = document.getElementById("erro");
+
+        if (senha2 === senha2correta) {
+            document.getElementById("correto").style.display = "block"; 
+            setTimeout(function() {
+                document.getElementById("correto").style.display = "none";
+            }, 2000); 
+            document.getElementById("senha3-container").style.display = "block"; 
+            document.getElementById("senha3").focus(); 
+            document.querySelector("#senha3-container button").disabled = false; 
+        } else {
+            erro.style.display = "block"; 
+            setTimeout(function() {
+                erro.style.display = "none";
+            }, 2000); 
+        }
+    }
+
+    function verificarSenha3() {
+        const senha3 = document.getElementById("senha3").value;
+        const erro = document.getElementById("erro");
+
+        if (senha3 === senha3correta) {
+            erro.style.display = "none"; 
+            document.getElementById("final").style.display = "block"; 
+            setTimeout(function() {
+                document.getElementById("final").style.display = "none";
+            }, 5000); 
+            terceiraSenhaCorreta = true; // Marca que a terceira senha foi correta
+            document.getElementById("btn-video").style.display = "block"; // Exibe o botão para mostrar o vídeo
+        } else {
+            erro.style.display = "block"; 
+            setTimeout(function() {
+                erro.style.display = "none";
+            }, 2000); 
+        }
+    }
+
+    // Função para mostrar o vídeo com animação fade-in
+    function mostrarVideo() {
+        const video = document.getElementById("video-background");
+        video.style.display = "block"; // Exibe o vídeo
+        video.classList.add("fadeIn"); // Adiciona a animação de fade-in
+        video.play(); // Inicia o vídeo
+    }
+</script>
+
+<!-- Vídeo que ficará à frente de tudo, com som -->
+<video id="video-background" autoplay loop>
+    <source src="imagens/video.mp4" type="video/mp4">
+</video>
+
+</body>
+</html>

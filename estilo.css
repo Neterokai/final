@@ -1,0 +1,93 @@
+body {
+    background-color: rgb(200, 162, 235) ;
+    text-align: center;
+    font-size: x-large;
+    font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+}
+
+h2 {
+    font-size: 250%;
+    margin-top: 100px;
+    text-align: center;
+    font-size: 1.5em;
+    
+}
+
+.parabens {
+     height: 400px;
+     background-image: url(/imagens/foto.div);
+     background: size 70%;
+     background-position: center;
+     font-size: medium;
+     text-align:inherit ;
+
+}
+
+h1 {
+    margin-top: 100px;
+    color: aliceblue;
+     text-align: center;
+    font-size: 1.5em;    ;
+}
+
+.container {
+    text-align: center;
+    font-size: xx-large;
+    color: darkblue;
+    padding: 20px;
+}
+
+.erro-mensagem {
+    position: fixed; 
+    top: 50%; 
+    left: 50%;
+    transform: translate(-50%, -50%); 
+    padding: 20px;
+    background-color: rgba(255, 0, 0, 0.7); 
+    color: white;
+    font-size: 60px;
+    border-radius: 30px;
+    display: none; 
+    z-index: 1000; 
+}
+.mensagem-certa {
+    position: fixed; 
+    top: 50%; 
+    left: 50%;
+    transform: translate(-50%, -50%); 
+    padding: 20px;
+    background-color: rgba(0, 255, 34, 0.7); 
+    color: white;
+    font-size: 120px;
+    border-radius: 30px;
+    display: none; 
+    z-index: 1000; 
+}
+.ultima-mensagem {
+
+    position: fixed; 
+    top: 50%; 
+    left: 50%;
+    transform: translate(-50%, -50%); 
+    padding: 20px;
+    background-color:darkgoldenrod;
+    color: white;
+    font-size: 60px;
+    border-radius: 30px;
+    display: none; 
+    z-index: 1000; 
+}
+
+.input-group {
+    margin: 10px 0;
+}
+
+input, button {
+    padding: 10px;
+    margin: 5px;
+    font-size: 1.2em;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
